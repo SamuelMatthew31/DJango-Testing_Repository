@@ -1,0 +1,91 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Django App{% endblock %}</title>
+
+    <!-- Tailwind CSS (hasil build sendiri, ganti Bootstrap CSS) -->
+    <link href="{% static 'css/output.css' %}" rel="stylesheet" />
+
+    <!-- HTMX (self-hosted) -->
+    <script src="{% static 'js/htmx.min.js' %}"></script>
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.14.1/dist/cdn.min.js"></script>
+
+    <!-- Font custom masih dipertahankan, ini bukan sesuatu yang perlu diganti Tailwind -->
+    <style>
+      body {
+        font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
+      }
+    </style>
+  </head>
+
+  <!-- hx-boost="true" di body: semua <a> & <form> di dalamnya otomatis jadi AJAX request via HTMX -->
+  <body class="bg-bg text-text-main antialiased" hx-boost="true">
+
+    <!-- Navigation Layer -->
+    <nav class="bg-card shadow-sm py-3" x-data="{ open: false }">
+      <div class="container mx-auto px-4 flex items-center justify-between">
+        <a href="#" class="font-bold tracking-wide text-lg text-text-main">My Django App</a>
+
+        <!-- Tombol hamburger mobile: dulu pakai data-bs-toggle Bootstrap, sekarang Alpine x-data -->
+        <button
+          @click="open = !open"
+          class="lg:hidden p-2 rounded hover:bg-gray-100"
+          aria-label="Toggle navigation"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+
+        <!-- Menu desktop -->
+        <ul class="hidden lg:flex gap-6">
+          <li><a href="{% url 'home' %}" class="font-medium hover:text-blue-600 transition-colors">Home</a></li>
+          <li><a href="{% url 'about' %}" class="font-medium hover:text-blue-600 transition-colors">About</a></li>
+          <li><a href="#" class="font-medium hover:text-blue-600 transition-colors">Contact</a></li>
+          <li><a href="{% url 'todos' %}" class="font-medium hover:text-blue-600 transition-colors">Todos</a></li>
+        </ul>
+      </div>
+
+      <!-- Menu mobile: muncul/hilang berdasarkan state Alpine "open", tanpa JS Bootstrap sama sekali -->
+      <ul
+        x-show="open"
+        x-transition
+        @click.outside="open = false"
+        class="lg:hidden flex flex-col gap-2 px-4 pt-3 pb-4"
+        style="display: none;"
+      >
+        <li><a href="{% url 'home' %}" class="block font-medium hover:text-blue-600">Home</a></li>
+        <li><a href="{% url 'about' %}" class="block font-medium hover:text-blue-600">About</a></li>
+        <li><a href="#" class="block font-medium hover:text-blue-600">Contact</a></li>
+        <li><a href="{% url 'todos' %}" class="block font-medium hover:text-blue-600">Todos</a></li>
+      </ul>
+    </nav>
+
+    <!-- Dynamic Content Layer -->
+    <main class="container mx-auto px-4">
+      <div class="bg-card rounded-xl p-10 shadow-[0_4px_12px_rgba(0,0,0,0.04)] my-10 leading-relaxed">
+        {% block content %}
+        <!-- Injected Django Child Templates will render here -->
+        {% endblock %}
+      </div>
+    </main>
+
+    <!-- CSRF token handler untuk semua request HTMX (GET aman, tapi POST/PUT/DELETE butuh ini) -->
+    <script>
+      function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+      }
+      document.body.addEventListener('htmx:configRequest', (event) => {
+        event.detail.headers['X-CSRFToken'] = getCookie('csrftoken');
+      });
+    </script>
+
+    {% block extra_js %}{% endblock %}
+  </body>
+</html>

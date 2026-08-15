@@ -1,0 +1,21 @@
+{
+  "name": "demoapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tailwind:watch": "tailwindcss -i ./static/src/input.css -o ./static/css/output.css --watch",
+    "tailwind:build": "tailwindcss -i ./static/src/input.css -o ./static/css/output.css --minify",
+    "postinstall": "Copy-Item node_modules/htmx.org/dist/htmx.min.js static/js/htmx.min.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "htmx.org": "^2.0.10",
+    "tailwindcss": "^4.3.3"
+  }
+}
