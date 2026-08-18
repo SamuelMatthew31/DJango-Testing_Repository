@@ -45,7 +45,7 @@
         <ul class="hidden lg:flex gap-6">
           <li><a href="{% url 'home' %}" class="font-medium hover:text-blue-600 transition-colors">Home</a></li>
           <li><a href="{% url 'about' %}" class="font-medium hover:text-blue-600 transition-colors">About</a></li>
-          <li><a href="#" class="font-medium hover:text-blue-600 transition-colors">Contact</a></li>
+          <li><a href="{% url 'contact' %}" class="font-medium hover:text-blue-600 transition-colors">Contact</a></li>
           <li><a href="{% url 'todos' %}" class="font-medium hover:text-blue-600 transition-colors">Todos</a></li>
         </ul>
       </div>
@@ -60,7 +60,7 @@
       >
         <li><a href="{% url 'home' %}" class="block font-medium hover:text-blue-600">Home</a></li>
         <li><a href="{% url 'about' %}" class="block font-medium hover:text-blue-600">About</a></li>
-        <li><a href="#" class="block font-medium hover:text-blue-600">Contact</a></li>
+        <li><a href="{% url 'contact' %}" class="block font-medium hover:text-blue-600">Contact</a></li>
         <li><a href="{% url 'todos' %}" class="block font-medium hover:text-blue-600">Todos</a></li>
       </ul>
     </nav>
